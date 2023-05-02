@@ -12,6 +12,8 @@ DINO_DUCKING = "ducking"
 class Dinosaur(Sprite):
     POS_X = 80
     POS_Y = 310
+    POS_Y_DUCK = 340
+
     def __init__(self):
         self.image = RUNNING [0]
         self.rect = self.image.get_rect()
@@ -24,7 +26,7 @@ class Dinosaur(Sprite):
         self.jump_velocity = JUMP_VELOCITY
         self.ducking_velocity = DUCKING_VELOCITY
 
-    def update(self, user_input):
+    def Dinosaur_update(self, user_input):
         if self.action == DINO_RUNNING:
             self.run()
         elif self.action == DINO_JUMPING:
@@ -54,13 +56,9 @@ class Dinosaur(Sprite):
             self.jump_velocity = JUMP_VELOCITY
 
     def ducking(self):
-        self.image =DUCKING[0]
-        self.rect.y -= self.ducking_velocity *2
-        self.jump_velocity -= 0.8
-        if self.jump_velocity > -DUCKING_VELOCITY:
-            self.rect.y = self.POS_Y
-            self.action = DINO_RUNNING
-            self.jump_velocity = DUCKING_VELOCITY
+        self.image = DUCKING[0] if self.step < 5 else DUCKING[1]
+        self.step += 1
+        self.rect.y = self.POS_Y_DUCK
 
 
 
