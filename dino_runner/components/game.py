@@ -4,6 +4,7 @@ from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.score import Score
 from dino_runner.utils.constants import BG, DINO_START, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.obstacles.obstacleManager import ObstacleManager
+from dino_runner.utils.constants import BG, RESET, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
 class Game:
     def __init__(self):
@@ -21,10 +22,10 @@ class Game:
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.score = Score()
-        self.deadth_count = 0
-
+        self.death_count = 0
+        self.collide = 0
     def run(self):
-        self.playing = True
+        self.running = True
         while self.running:
             if not self.playing:
                 self.show_menu()
@@ -50,8 +51,11 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
-        self.obstacle_manager.update(self.game_speed, self.player, self.on_deadth)
+        self.obstacle_manager.update(self.game_speed, self.player, self.on_death)
         self.score.update(self)
+        
+        
+       
 
     def draw(self):
         self.clock.tick(FPS)
@@ -79,26 +83,65 @@ class Game:
         self.death_count += 1 
 
     def show_menu(self):
-        center_x = SCREEN_WIDTH // 2
-        center_y = SCREEN_HEIGHT // 2
-        self.screen.fill((225, 225, 225))
         if self.death_count == 0:
-            font = pygame.font.Font('freesansbold.ttf', 30)
-            text = font.render("Press any key to start.", True, (0,0,0))
-            text_rect = text.get_rect()
-            text_rect.center = (center_x, center_y)
-            self.screen.blit(text, text_rect)
-            self.screen.blit(DINO_START, (center_x - 49, center_y - 121))
+            self.messages()
+
+        elif self.death_count >= 1:
+            self.messages1()
+
+        elif self.death_count == 1:
+            self.Collide()
+            self.massages1()
+        
+        elif self.score() >= 0:
+            self.massages2()
+        
         else:
-            print(self.deadth_count)
+            print(self.death_count)
             
         pygame.display.update()
         self.handle_menu_events()
+          
+    def messages(self):
+        center_x = SCREEN_WIDTH // 2
+        center_y = SCREEN_HEIGHT // 2
+        self.screen.fill((225, 225, 225))
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render("Press any key to start.", True, (0,0,0))
+        text_rect = text.get_rect()
+        text_rect.center = (center_x, center_y)
+        self.screen.blit(text, text_rect)
+        self.screen.blit(DINO_START, (center_x - 49, center_y - 121))
 
-    def handle_menu_event(self):
+    def messages1(self):
+        center_x = SCREEN_WIDTH // 2
+        center_y = SCREEN_HEIGHT // 2
+        self.screen.fill((225, 225, 225))
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render("Press any key to reset.", True, (0,0,0))
+        text_rect = text.get_rect()
+        text_rect.center = (center_x, center_y)
+        self.screen.blit(text, text_rect)
+        self.screen.blit(RESET, (center_x - 49, center_y - 121))
+
+    def messages2(self):
+        center_x = SCREEN_WIDTH // 2
+        center_y = SCREEN_HEIGHT // 2
+        self.screen.fill((225, 225, 225))
+        text_rect = text.get_rect()
+        text_rect.center = (center_x, center_y)
+        self.screen.blit(text, text_rect)
+        self.score()
+
+
+
+    
+    def handle_menu_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
                 self.play()
+
+     
 

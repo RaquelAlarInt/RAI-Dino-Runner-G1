@@ -11,7 +11,7 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game_speed, self.obstacles)
             if player.rect.colliderect(obstacle.rect):
-              on_death()
+              on_deadth()
 
     def draw(self, screen):
         for obstacle in self.obstacles:
