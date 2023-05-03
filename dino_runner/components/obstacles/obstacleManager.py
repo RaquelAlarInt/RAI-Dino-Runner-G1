@@ -1,23 +1,22 @@
 import pygame
 from dino_runner.components.obstacles.cactus import Cactus
-from dino_runner.utils.constants import LARGE_CACTUS, SMALL_CACTUS
 
 class ObstacleManager:
     def __init__(self):
         self.obstacles = []
         
-    def update(self, game):
+    def update(self, game_speed, player, on_deadth):
         if len(self.obstacles) == 0:
-            self.obstacles.append(Cactus(SMALL_CACTUS))
-            self.obstacles.append(Cactus(LARGE_CACTUS))
-            
+            self.obstacles.append(Cactus())
         for obstacle in self.obstacles:
-            obstacle.update(game.game_speed, self.obstacles)
-            if game.player.rect.colliderect(obstacle.rect):
-                print("BOOM")
-                pygame.time.delay(500)
-                game.playing = False
+            obstacle.update(game_speed, self.obstacles)
+            if player.rect.colliderect(obstacle.rect):
+              on_death()
 
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)
+
+    def reset(self):
+        self.obsatcles = []
+
