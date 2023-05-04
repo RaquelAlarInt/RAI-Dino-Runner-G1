@@ -1,5 +1,6 @@
 import pygame
 import random
+
 from dino_runner.utils.constants import SCREEN_WIDTH
 
 class PowerUp:
@@ -13,12 +14,11 @@ class PowerUp:
         self.start_time = 0
         self.duration = random.randint(3, 5)
 
-    def update(self, game_speed):
+    def update(self, game_speed, power_ups):
         self.rect.x -= game_speed
-        if self.rect.x <= self.rect.width:
+        if self.rect.x <= - self.rect.width:
             power_ups.pop()
 
 
     def draw(self, screen):
-
         screen.blit(self.image, self.rect)

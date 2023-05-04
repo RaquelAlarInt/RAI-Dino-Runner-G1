@@ -1,0 +1,25 @@
+import pygame
+from dino_runner.utils.constants import HAMMER
+class Hammer: 
+
+    def __init__ (self):
+        if user_input[pygame.K_1]:
+            self.action = HAMMER
+
+    def update(self):
+        self.generate_power_up(score)
+        for power_up in self.power_ups:
+            power_up.update(game_speed, self.power_ups)
+            if power_up.rect.colliderect(player.rect):
+                power_up.start_time = pygame.time.get_ticks()
+                player.on_pick_power_up(power_up)
+                self.power_ups.remove(power_up)
+                break
+
+    def draw(self, screen):
+        rect.x = 800
+        rect.y = 300
+        screen.blit(HAMMER, rect.x, rect.y )
+    def hammer(self):
+        self.image = HAMMER[0] if self.step < 5 else HAMMER[1]
+        self.step += 1
