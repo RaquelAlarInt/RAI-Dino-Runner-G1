@@ -3,7 +3,8 @@ import random
 
 from dino_runner.components.power_ups.power_up import PowerUp
 from dino_runner.components.power_ups.shield import Shield
-
+from dino_runner.components.power_ups.hammer import Hammer
+from dino_runner.components.power_ups.heart import Heart
 class PowerUpManager:
     def __init__(self):
         self.power_ups: list[PowerUp] = []
@@ -12,7 +13,13 @@ class PowerUpManager:
     def generate_power_up(self, score):
         if not self.power_ups and self.when_appears == score:
             self.when_appears += random.randint(300, 400)
-            self.power_ups.append(Shield())
+            if random.random() < 0.5: 
+                self.power_ups.append(Shield())
+          
+            else:
+                self.power_ups.append(Heart())
+                self.power_ups.append(Hammer())
+
 
     
     def update(self, game_speed, score, player):

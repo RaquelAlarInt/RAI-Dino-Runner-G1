@@ -1,10 +1,10 @@
-from pygame.sprite import Sprite
-
 from dino_runner.utils.constants import SCREEN_WIDTH
 
-class Obstacle:
-    def __init__(self, image):
+
+class Obstacles:
+    def __init__(self, image, type):
         self.image = image
+        self.type = type
         self.rect = self.image.get_rect()
         self.rect.x = SCREEN_WIDTH
 

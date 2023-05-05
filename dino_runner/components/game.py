@@ -1,4 +1,5 @@
 import pygame
+#from pygame import mixer
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.score import Score
@@ -6,7 +7,8 @@ from dino_runner.components.obstacles.obstacleManager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.utils.constants import BG, DINO_START, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.utils.constants import SHIELD_TYPE
-from dino_runner.utils.constants import DINO_START, RESET, CLOUD
+from dino_runner.utils.constants import DINO_START, RESET, HAMMER_TYPE, HEART, HEART_TYPE
+
 
 
 class Game:
@@ -21,15 +23,15 @@ class Game:
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
-        
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.score = Score()
-        #pygame.mixer.music.load("")
+        #pygame.mixer.music.load(SOUND)
         #pygame.mixer.music.play(-1)
         #pygame.mixer.music.set_volume(0.2)
         self.death_count = 0
         self.power_up_manager = PowerUpManager()
+        
 
     def run(self):
         self.running = True
@@ -93,12 +95,22 @@ class Game:
         self.x_pos_bg -= self.game_speed
 
     def on_death(self):
-        print("BOOM")
-        is_invicible = self.player.type == SHIELD_TYPE
-        if not is_invicible:
+        is_invincible = False
+        if self.player.type == SHIELD_TYPE:
+            is_invincible = True
+        elif self.player.type == HAMMER_TYPE:
+            for obstacle in self.obstacle_manager.obstacles:
+                if obstacle.rect.colliderect(self.player.rect):
+                    self.obstacle_manager.obstacles.remove(obstacle)
+                return
+        elif self.player.type == HEART_TYPE:
+            for obstacle in self.obstacle_manager.obstacles:
+                if obstacle.rect.colliderect(self.player.rect):
+                    self.obstacle_manager.obstacles.remove(obstacle)
+                return
+        if not is_invincible:
             pygame.time.delay(500)
             self.playing = False
-            self.death_count += 1 
 
     def show_menu(self):
        
@@ -115,7 +127,7 @@ class Game:
     def message(self):
         center_x = SCREEN_WIDTH // 2
         center_y = SCREEN_HEIGHT // 2   
-        self.screen.fill((225, 225, 225))
+        self.screen.fill((0, 255, 0))
         font = pygame.font.Font('freesansbold.ttf', 30)
         text = font.render("Press any key to start", True, (0,0,0))
         text_rect = text.get_rect()
@@ -127,7 +139,7 @@ class Game:
     def message1(self):
         center_x = SCREEN_WIDTH // 2
         center_y = SCREEN_HEIGHT // 2   
-        self.screen.fill((225, 225, 225))
+        self.screen.fill((0, 225, 0))
         font = pygame.font.Font('freesansbold.ttf', 30)
         text = font.render("Press any key to reset", True, (0,0,0))
         text_rect = text.get_rect()
